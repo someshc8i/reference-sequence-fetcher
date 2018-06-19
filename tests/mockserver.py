@@ -55,7 +55,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         if fbs == 0 and lbs == seq_obj.size - 1:
             if REDIRECTION is True:
                 '''
-                If the server is redirecting to aws it'll send 301 instead of a
+                If the server is redirecting to aws it'll send 302 instead of a
                 200 or 206 in case of queries using Range header. Response will
                 also contain a `Location` header in which redirected URL will
                 be sent to the client.
@@ -329,4 +329,4 @@ def start_mock_server(port, circular_support, redirection, daemon=True):
 
 
 if __name__ == '__main__':
-    start_mock_server(5000, True, True, False)
+    start_mock_server(5000, True, False, False)
