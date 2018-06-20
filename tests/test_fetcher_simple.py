@@ -1,9 +1,58 @@
-from reference_sequence_fetcher import Fetcher
+from reference_sequence_fetcher.fetcher import Fetcher, handle_error
+import pytest
+import warnings
+
+
+class MockResponse(object):
+    def __init__(self, status_code, text=None):
+        self.status_code = status_code
+        self.text = text
 
 
 def test_getter_setter_base_url_Fetcher():
     fetcher = Fetcher('111.11.1.0')
-    assert fetcher.get_base_url() == '111.11.1.0'
+    assert fetcher.get_base_url() == 'http://111.11.1.0'
 
     fetcher.set_base_url('localhost')
-    assert fetcher.get_base_url() == 'localhost'
+    assert fetcher.get_base_url() == 'http://localhost'
+
+
+def test_fetch_sequence_full_sequence_retrieval(data, server):
+    fetcher = Fetcher(server)
+    print(fetcher)
+    for seq in data:
+        assert fetcher.fetch_sequence(seq.md5) == seq.sequence
+
+
+def test_fetch_sequence_start_end_sequence_retrieval(data, server):
+    fetcher = Fetcher(server)
+    print(fetcher)
+    for seq in data:
+        assert fetcher.fetch_sequence(seq.md5, start=0, end=10) \
+            == seq.sequence[:10]
+
+
+def test_fetch_sequence_range_sequence_retrieval(data, server):
+    fetcher = Fetcher(server)
+    print(fetcher)
+    for seq in data:
+        assert fetcher.fetch_sequence(seq.md5, fbs=0, lbs=10) \
+            == seq.sequence[:11]
+
+
+@pytest.mark.parametrize("_input, _output", [
+    (400, 'Check the parameters provided i.e start, end, fbs and lbs.'),
+    (404, 'Checksum identifier provided can not be found.'),
+    (415, 'Encoding is not supported by the server.'),
+    (416, 'Range can not be satisfied.'),
+
+])
+def test_handle_error_function(server, _input, _output):
+    with pytest.raises(Exception) as excinfo:
+        handle_error(MockResponse(_input))
+    assert str(excinfo.value) == _output
+
+
+def test_warning_501_handle_error_function(server):
+    with pytest.warns(UserWarning, match='Circular support is not implemented in the server'):
+        handle_error(MockResponse(501))

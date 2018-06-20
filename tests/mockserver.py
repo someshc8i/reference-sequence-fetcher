@@ -5,7 +5,7 @@ import cgi
 import socket
 from threading import Thread
 
-from mockserver_utils import get_seq_obj
+from tests.mockserver_utils import get_seq_obj
 
 
 DATA = []
