@@ -22,6 +22,7 @@ def test_fetch_sequence_full_sequence_retrieval(data, server):
     print(fetcher)
     for seq in data:
         assert fetcher.fetch_sequence(seq.md5) == seq.sequence
+        assert Fetcher.sequence(server, seq.md5) == seq.sequence
 
 
 def test_fetch_sequence_start_end_sequence_retrieval(data, server):
