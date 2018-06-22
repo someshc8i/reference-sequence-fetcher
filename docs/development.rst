@@ -77,7 +77,7 @@ Pull requests should meet the following criteria.
 3. Include a descriptive title and description for the pull request.
 4. Have descriptive commit messages.
 
-Testsing
+Testing
 ========
 
 To run the tests clone the repository and run the following command
