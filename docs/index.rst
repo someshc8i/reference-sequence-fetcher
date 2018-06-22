@@ -32,10 +32,12 @@ and two class methods `sequenece` and `metadata`
 
    installation
    getting_started
-   tutorials
+   sequences
    api_documentation
+   examples
    cli
    development
+
 
 
 Report an Issue
