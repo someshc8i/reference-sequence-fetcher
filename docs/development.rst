@@ -6,7 +6,7 @@ Contributing to reference-sequence-fetcherdoc
 =============================================
 
 
-There are numerous ways to contriubte to ChatterBot. All of which are highly encouraged.
+There are numerous ways to contriubte to reference-sequence-fetcher. All of which are highly encouraged.
 
 - Contributing bug reports and feature requests
 
@@ -22,7 +22,7 @@ Every bit of help received on this project is highly appreciated.
 Setting Up a Development Environment
 ------------------------------------
 
-To contribute to ChatterBot's development, you simply need:
+To contribute to reference-sequence-fetcher's development, you simply need:
 
 - Python3
 
