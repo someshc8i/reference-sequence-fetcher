@@ -17,11 +17,15 @@ An example would be like::
     >>fetcher.fetch_sequence('<checksum>')
     >>ATGCATCGACTG.......ATGCATCGACTG
 
-Fetcher typically has two methods:
- * fetch_sequence to fetch the sequence metadata
- * fetch_metadata to fetch the metadata of the sequence
+Fetcher object typically has two methods:
+ * `fetch_sequence` to fetch the sequence metadata
+ * `fetch_metadata` to fetch the metadata of the sequence
 
+and two class methods `sequenece` and `metadata`
 
+.. note::
+
+    reference-sequence-fetcher is stable only for Python3
 
 .. toctree::
    :maxdepth: 3
