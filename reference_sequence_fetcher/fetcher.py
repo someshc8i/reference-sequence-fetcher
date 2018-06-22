@@ -3,6 +3,10 @@ import warnings
 
 
 def handle_error(response):
+    ''' handle_error function is used to raise exception is case of status code
+    other than 200 or 206
+    '''
+
     if response.status_code == 400:
         raise Exception(
             'Check the parameters provided i.e start, end, fbs and lbs.')
@@ -22,6 +26,11 @@ def handle_error(response):
 
 
 class Fetcher(object):
+    '''Act as a Factory class to retrieve sequences and metadata. For more
+    information refer :
+    https://reference-sequence-fetcher.readthedocs.io/en/latest/api_documentation.html
+    '''
+
     def __init__(self, base_url):
         base_url = str(base_url)
         if '://' in base_url:
