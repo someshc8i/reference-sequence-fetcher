@@ -23,7 +23,7 @@ API Documentation
 
         :rtype: void
 
-    .. py:method:: fetch_sequence(checksum, [start=None, end=None, fbs=None, lbs=None, encoding=None])
+    .. py:method:: fetch_sequence(checksum, [start=None, end=None, encoding=None])
 
         Act as factory method for retrieving sequences
 
@@ -35,12 +35,6 @@ API Documentation
 
         :param end: Used to define end location of the sequence to be retrieved (exclusive)
         :type end: integer
-
-        :param fbs: first-byte-spec used to define start location of the sequence to be retrieved (inclusive)
-        :type fbs: integer
-
-        :param lbs: last-byte-spec used to define end location of the sequence to be retrieved (inclusive)
-        :type lbs: integer
 
         :param encoding: To be passed in Accept header of the http request. Default used by the server is text/plain
         :type encoding: string
@@ -59,7 +53,7 @@ API Documentation
 
         :rtype: dict
 
-    .. py:classmethod:: sequence(base_url, checksum, [start=None, end=None, fbs=None, lbs=None, encoding=None])
+    .. py:classmethod:: sequence(base_url, checksum, [start=None, end=None, encoding=None])
 
         A class method for easily fetching single sequence without creating Fetcher object.
         Parameters definitions as per defined above

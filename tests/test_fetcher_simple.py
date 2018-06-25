@@ -42,25 +42,18 @@ def test_getter_setter_base_url_Fetcher():
     assert str(fetcher) == 'http://localhost'
 
 
-def test_fetch_sequence_full_sequence_retrieval(data, server):
+def test_fetch_complete_sequence_retrieval(data, server):
     fetcher = Fetcher(server)
     for seq in data:
         assert fetcher.fetch_sequence(seq.md5) == seq.sequence
         assert Fetcher.sequence(server, seq.md5) == seq.sequence
 
 
-def test_fetch_sequence_start_end_sequence_retrieval(data, server):
+def test_fetch_sub_sequence_retrieval(data, server):
     fetcher = Fetcher(server)
     for seq in data:
         assert fetcher.fetch_sequence(seq.md5, start=0, end=10) \
             == seq.sequence[:10]
-
-
-def test_fetch_sequence_range_sequence_retrieval(data, server):
-    fetcher = Fetcher(server)
-    for seq in data:
-        assert fetcher.fetch_sequence(seq.md5, fbs=0, lbs=10) \
-            == seq.sequence[:11]
 
 
 @pytest.mark.parametrize("_input, _output", [

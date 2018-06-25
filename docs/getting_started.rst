@@ -8,7 +8,7 @@ The first thing you’ll need to do to get started is install ChatterBot.
 
    pip install reference_sequence_fetcher
 
-See :ref:`Installation<installation>` for options for alternative installation methods.
+See Installation for options for alternative installation methods.
 
 Create a new Fetcher instance
 ==============================
@@ -39,7 +39,7 @@ will be given in the API documentaion section.
 
    print(fetcher.fetch_sequence('<checksum>'))
 
-   print(fetcher.fetch_sequence('<checksum>', fbs=0, lbs=10))
+   print(fetcher.fetch_sequence('<checksum>', start=0, end=10))
 
 Fetch metadata
 ==============
