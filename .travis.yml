@@ -5,6 +5,7 @@ python:
     - "3.6"
 install:
     - pip install -r requirements.txt
-script: coverage run --source reference_sequence_fetcher -m py.test
+script:
+    - coverage run --source reference_sequence_fetcher -m py.test --cir
 after_success:
   - coveralls

@@ -36,7 +36,7 @@ def test_getter_setter_base_url_Fetcher():
     fetcher = Fetcher('111.11.1.0')
     assert fetcher.get_base_url() == 'http://111.11.1.0'
 
-    fetcher.set_base_url('localhost')
+    fetcher.set_base_url('http://localhost')
     assert fetcher.get_base_url() == 'http://localhost'
 
     assert str(fetcher) == 'http://localhost'
@@ -47,13 +47,30 @@ def test_fetch_complete_sequence_retrieval(data, server):
     for seq in data:
         assert fetcher.fetch_sequence(seq.md5) == seq.sequence
         assert Fetcher.sequence(server, seq.md5) == seq.sequence
+        assert fetcher._Fetcher__cache is None
 
 
 def test_fetch_sub_sequence_retrieval(data, server):
     fetcher = Fetcher(server)
     for seq in data:
-        assert fetcher.fetch_sequence(seq.md5, start=0, end=10) \
-            == seq.sequence[:10]
+        assert len(fetcher.fetch_sequence(seq.md5, start=0, end=10)) \
+            == len(seq.sequence[:10])
+        assert fetcher._Fetcher__cache is None
+
+
+def test_fetch_sub_sequence_retrieval_one_parameter(data, server):
+    fetcher = Fetcher(server)
+    assert fetcher.fetch_sequence(data[0].md5, end=5) == 'CCACA'
+    assert fetcher._Fetcher__cache == \
+        json.loads(get_metadata(data[0], data[0].md5))
+    assert fetcher.fetch_sequence(data[0].md5, start=0) == data[0].sequence
+
+
+def test_fetch_circular_sub_sequence_retrieval(data, server):
+    fetcher = Fetcher(server)
+    assert fetcher.fetch_sequence(data[2].md5, start=5374, end=5) == \
+        'ATCCAACCTGCAGAGTT'
+    assert fetcher._Fetcher__cache is None
 
 
 @pytest.mark.parametrize("_input, _output", [
@@ -61,6 +78,7 @@ def test_fetch_sub_sequence_retrieval(data, server):
     (404, 'Checksum identifier provided can not be found.'),
     (415, 'Encoding is not supported by the server.'),
     (416, 'Range can not be satisfied.'),
+    (500, 'There maybe some internal server error.')
 
 ])
 def test_handle_error_function(server, _input, _output):

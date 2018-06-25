@@ -1,10 +1,12 @@
 import requests
 import warnings
+import json
+from urllib.parse import urlparse
 
 
 def handle_error(response):
-    ''' handle_error function is used to raise exception is case of status code
-    other than 200 or 206
+    ''' handle_error function is used to raise exception is case of status codes
+    other than 200, 206 or 302.
     '''
 
     if response.status_code == 400:
@@ -32,38 +34,55 @@ class Fetcher(object):
     '''
 
     def __init__(self, base_url):
-        base_url = str(base_url)
-        if '://' in base_url:
-            self.__base_url = base_url
-        else:
-            self.__base_url = 'http://' + base_url
+        self.set_base_url(base_url)
+        self.__cache = None
 
     def __str__(self):
-        return self.__base_url
+        return self.get_base_url()
 
     def get_base_url(self):
         return self.__base_url
 
     def set_base_url(self, base_url):
-        self.__base_url = 'http://' + str(base_url)
+        url = urlparse(base_url)
+        if url.scheme == '':
+            self.__base_url = 'http://' + url.path
+        else:
+            self.__base_url = url.scheme + '://' + url.netloc
+
+    def __set_cache(self, checksum):
+        if self.__cache is None or \
+                self.__cache['metadata']['checksum'] != checksum:
+            API = '/sequence/'
+            url = self.get_base_url() + API + str(checksum) + '/metadata'
+            self.__cache = json.loads(handle_error(requests.get(url)).text)
 
     def fetch_sequence(self, checksum, **kwargs):
         API = '/sequence/'
         url = self.get_base_url() + API + str(checksum)
 
-        if 'start' or 'end' in kwargs:
-            url = url + '?'
-        if 'start' in kwargs:
-            url = url + 'start=' + str(kwargs['start']) + '&'
-        if 'end' in kwargs:
-            url = url + 'end=' + str(kwargs['end'])
+        start = kwargs.get('start')
+        end = kwargs.get('end')
+        # encoding = kwargs.get('encoding')
 
         headers = {}
-        if 'fbs' and 'lbs' in kwargs:
-            headers['Range'] = \
-                'bytes=' + str(kwargs['fbs']) + '-' + str(kwargs['lbs'])
-        if 'encoding' in kwargs:
-            headers['Accept'] = str(kwargs['encoding'])
+        if start is not None and end is not None and end >= start:
+            headers['Range'] = 'bytes=' + str(start) + '-' + str(end - 1)
+
+        elif (start and end is None) or (start is None and end):
+            self.__set_cache(checksum)
+            length = self.__cache['metadata']['length']
+            if start is None:
+                start = 0
+            if end is None:
+                end = length
+            headers['Range'] = 'bytes=' + str(start) + '-' + str(end - 1)
+
+        elif start and end and end < start:
+            url = url + '?start=' + str(start) + '&' + 'end=' + str(end)
+
+        # if encoding:
+        #     headers['Accept'] = encoding
 
         response = handle_error(requests.get(url, headers=headers))
         return response.text
@@ -71,10 +90,10 @@ class Fetcher(object):
     def fetch_metadata(self, checksum, **kwargs):
         API = '/sequence/'
         url = self.get_base_url() + API + str(checksum) + '/metadata'
-        headers = {}
-        if 'encoding' in kwargs:
-            headers['Accept'] = str(kwargs['encoding'])
-        response = handle_error(requests.get(url, headers=headers))
+        # headers = {}
+        # if 'encoding' in kwargs:
+        #     headers['Accept'] = str(kwargs['encoding'])
+        response = handle_error(requests.get(url))
         return response.text
 
     @classmethod
