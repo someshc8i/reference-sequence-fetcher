@@ -31,7 +31,7 @@ Examples
 
 .. code-block:: bash
 
-    ref-seq-fetcher sequence 111.11.1.0 6681ac2f62509cfc220d78751b8dc524  -end 20
+    ref-seq-fetcher sequence 111.11.1.0 6681ac2f62509cfc220d78751b8dc524  -end 0
 
 
 .. code-block:: bash
