@@ -5,8 +5,14 @@ from urllib.parse import urlparse
 
 
 def handle_error(response):
-    ''' handle_error function is used to raise exception is case of status codes
-    other than 200, 206 or 302.
+    '''
+    args:
+        reponse - Response object from requests library. Called from
+        fetch_sequence and fetch_metadata methods of Fetcher
+
+    objective:
+        handle_error function is used to raise exception is case of status
+        codes other than 200, 206 or 302.
     '''
 
     if response.status_code == 400:
@@ -29,21 +35,47 @@ def handle_error(response):
 
 class Fetcher(object):
     '''Act as a Factory class to retrieve sequences and metadata. For more
-    information refer :
-    https://reference-sequence-fetcher.readthedocs.io/en/latest/api_documentation.html
+    information refer
     '''
 
     def __init__(self, base_url):
+        '''
+        args:
+            base_url - server's base url which will be used to query sequences
+            or metdata from methods defined below
+        objective:
+            Works as a Factory class, Sets __cache to None
+        '''
+
         self.set_base_url(base_url)
         self.__cache = None
 
     def __str__(self):
+        '''
+        objective:
+            To get base url by doing str(<Fetcher object>) or it can be used to
+            store fetcher objects in a dict as well
+        '''
         return self.get_base_url()
 
     def get_base_url(self):
+        '''
+        objective:
+            gets the __base_url of Fetcher object
+        '''
         return self.__base_url
 
     def set_base_url(self, base_url):
+        '''
+        args:
+            base_url - server's base url which will be used to query sequences
+            or metdata from methods defined below
+        objective:
+            Sets the __base_url of the Fetcher object. Used to change the
+            __base_url in already instantiated object. Url scheme stores the
+            name of protocol (http or https) if provided otherwise if its empty
+            string it adds http://
+        '''
         url = urlparse(base_url)
         if url.scheme == '':
             self.__base_url = 'http://' + url.path
@@ -51,6 +83,16 @@ class Fetcher(object):
             self.__base_url = url.scheme + '://' + url.netloc
 
     def __set_cache(self, checksum):
+        '''
+        args:
+            self - Object reference
+            checksum - Checksum of the sequence to be retrieved.
+        objective:
+            Called from fetch_sequence in the condition of only one of the
+            start and end is provided. Makes a call to metadata endpoint and
+            stores in __cache mainly to have length only if __cache is already
+            populated with the metadata of same sequence
+        '''
         if self.__cache is None or \
                 self.__cache['metadata']['checksum'] != checksum:
             API = '/sequence/'
@@ -58,6 +100,20 @@ class Fetcher(object):
             self.__cache = json.loads(handle_error(requests.get(url)).text)
 
     def fetch_sequence(self, checksum, **kwargs):
+        '''
+        args:
+            checksum - Checksum of the sequence to be retrieved.
+        optional args:
+            start - first byte
+            end - last byte
+            encoding - Accept header value
+        objective:
+            Used as the factory method to retrieve sequence. start and end are
+            translated into Range header. If only one of start and end is given
+            other parameter is filled using metadata-cache system. If it's a
+            circular query start and end are passed as url params.
+        '''
+
         API = '/sequence/'
         url = self.get_base_url() + API + str(checksum)
 
@@ -88,6 +144,15 @@ class Fetcher(object):
         return response.text
 
     def fetch_metadata(self, checksum, **kwargs):
+        '''
+        args:
+            checksum - Checksum of the sequence to be retrieved.
+        optional args:
+            encoding - Accept header value
+        objective:
+            Used as the factory method to retrieve metadata.
+        '''
+
         API = '/sequence/'
         url = self.get_base_url() + API + str(checksum) + '/metadata'
         # headers = {}
@@ -98,10 +163,34 @@ class Fetcher(object):
 
     @classmethod
     def sequence(cls, base_url, checksum, **kwargs):
+        '''
+        args:
+            base_url - server's base url which will be used to query sequences
+            or metdata from methods defined below
+            checksum - Checksum of the sequence to be retrieved.
+        optional args:
+            start - first byte
+            end - last byte
+            encoding - Accept header value
+        objective:
+            Used as the shortcut method to retrieve sequence and internally
+            calls fetch_sequence.
+        '''
         fetcher = cls(base_url)
         return fetcher.fetch_sequence(checksum, **kwargs)
 
     @classmethod
     def metadata(cls, base_url, checksum, **kwargs):
+        '''
+        args:
+            base_url - server's base url which will be used to query sequences
+            or metdata from methods defined below
+            checksum - Checksum of the sequence to be retrieved.
+        optional args:
+            encoding - Accept header value
+        objective:
+            Used as the shortcut method to retrieve metadata and internally
+            calls fetch_metadata.
+        '''
         fetcher = cls(base_url)
         return fetcher.fetch_metadata(checksum, **kwargs)

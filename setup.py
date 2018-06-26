@@ -18,7 +18,7 @@ setuptools.setup(
     install_requires=install_requires,
     entry_points='''
         [console_scripts]
-        reference_sequence_fetcher=reference_sequence_fetcher.main:main
+        reference_sequence_fetcher=reference_sequence_fetcher.cli:main
     ''',
     classifiers=(
         "Programming Language :: Python :: 3",
