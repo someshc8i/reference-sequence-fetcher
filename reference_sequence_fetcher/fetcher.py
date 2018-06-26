@@ -94,7 +94,7 @@ class Fetcher(object):
             populated with the metadata of same sequence
         '''
         if self.__cache is None or \
-                self.__cache['metadata']['checksum'] != checksum:
+                self.__cache['metadata']['id'] != checksum:
             API = '/sequence/'
             url = self.get_base_url() + API + str(checksum) + '/metadata'
             self.__cache = json.loads(handle_error(requests.get(url)).text)
@@ -117,15 +117,16 @@ class Fetcher(object):
         API = '/sequence/'
         url = self.get_base_url() + API + str(checksum)
 
-        start = int(kwargs.get('start'))
-        end = int(kwargs.get('end'))
+        start = int(kwargs.get('start')) if kwargs.get('start') is not None else None
+        end = int(kwargs.get('end')) if kwargs.get('end') is not None else None
         # encoding = kwargs.get('encoding')
 
         headers = {}
         if start is not None and end is not None and end >= start:
             headers['Range'] = 'bytes=' + str(start) + '-' + str(end - 1)
 
-        elif (start and end is None) or (start is None and end):
+        elif (start is not None and end is None) or (start is None and end is not None):
+            print('why :()' + str(start) + str(end))
             self.__set_cache(checksum)
             length = self.__cache['metadata']['length']
             if start is None:
