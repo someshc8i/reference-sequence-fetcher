@@ -4,8 +4,10 @@ import re
 import cgi
 import socket
 from threading import Thread
-
-from tests.mockserver_utils import get_seq_obj
+try:
+    from tests.mockserver_utils import get_seq_obj
+except:
+    from mockserver_utils import get_seq_obj
 
 
 DATA = []

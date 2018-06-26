@@ -117,8 +117,8 @@ class Fetcher(object):
         API = '/sequence/'
         url = self.get_base_url() + API + str(checksum)
 
-        start = kwargs.get('start')
-        end = kwargs.get('end')
+        start = int(kwargs.get('start'))
+        end = int(kwargs.get('end'))
         # encoding = kwargs.get('encoding')
 
         headers = {}
