@@ -27,7 +27,6 @@ def sequence(base_url, checksum, start, end, encoding):
 @click.argument('checksum')
 @click.option('--encoding', '-en', default=None)
 def metadata(base_url, checksum, encoding):
-    print('hello')
     click.echo(
         Fetcher.metadata(
             base_url, checksum, encoding=encoding))
