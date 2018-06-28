@@ -7,6 +7,8 @@ from tests.test_fetcher import get_metadata
 
 
 def test_sequence(server, data):
+    '''Test case to test sequence function of cli
+    '''
     seq = data[0]
     runner = CliRunner()
     result = runner.invoke(sequence, [server, seq.md5])
@@ -16,6 +18,8 @@ def test_sequence(server, data):
 
 @pytest.mark.skip
 def test_metadata(server, data):
+    '''Test case to test metadata function of cli.
+    '''
     seq = data[0]
     runner = CliRunner()
     result = runner.invoke(metadata, [server, seq.md5])
