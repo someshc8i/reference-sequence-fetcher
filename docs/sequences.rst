@@ -27,7 +27,7 @@ User can also retrieve sub-sequences using start and end optional parameters
 
 start and end used to retrieve sub-subsequence of specified bytes. Start is 0-start inclusive
 and end is exclusive. |n|
-0 <= start < length of sequence ; 0 <= end <= length of sequence
+0 <= start < length of sequence ; 1 <= end <= length of sequence
 
 For ex sequence A is given as ``ATGCATGCATGC`` |n|
 Length is 12 |n|
