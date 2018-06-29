@@ -23,7 +23,7 @@ API Documentation
 
         :rtype: void
 
-    .. py:method:: fetch_sequence(checksum, [start=None, end=None, encoding=None])
+    .. py:method:: fetch_sequence(checksum, [start=None, end=None])
 
         Act as factory method for retrieving sequences
 
@@ -38,7 +38,7 @@ API Documentation
 
         :rtype: string
 
-    .. py:method:: fetch_metadata(checksum, [encoding=None])
+    .. py:method:: fetch_metadata(checksum)
 
         Act as factory method for retrieving sequences
 
@@ -47,12 +47,12 @@ API Documentation
 
         :rtype: dict
 
-    .. py:classmethod:: sequence(base_url, checksum, [start=None, end=None, encoding=None])
+    .. py:classmethod:: sequence(base_url, checksum, [start=None, end=None])
 
         A class method for easily fetching single sequence without creating Fetcher object.
         Parameters definitions as per defined above
 
-    .. py:classmethod:: metdata(base_url, checksum, [encoding=None])
+    .. py:classmethod:: metdata(base_url, checksum)
 
         A class method for easily fetching single metadata without creating Fetcher object.
         Parameters definitions as per defined above
