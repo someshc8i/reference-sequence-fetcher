@@ -36,9 +36,6 @@ API Documentation
         :param end: Used to define end location of the sequence to be retrieved (exclusive)
         :type end: integer
 
-        :param encoding: To be passed in Accept header of the http request. Default used by the server is text/plain
-        :type encoding: string
-
         :rtype: string
 
     .. py:method:: fetch_metadata(checksum, [encoding=None])
@@ -47,9 +44,6 @@ API Documentation
 
         param checksum: Checksum identifier of the sequence to be retrieved
         :type checksum: string
-
-        :param encoding: To be passed in Accept header of the http request. Default used by the server is application/json
-        :type encoding: string
 
         :rtype: dict
 
