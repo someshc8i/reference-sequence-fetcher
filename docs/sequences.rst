@@ -39,7 +39,7 @@ Length is 12 |n|
     >>print(fetcher.fetch_sequence('<checksum>'), start=0, end=5)
     >>ATGCA
 
-start and end can also used to retrieve circular sequences in a circular manner
+If a server supports circular chromosomes, the client supports crossing the origin using the start and end parameters
 
 .. code-block:: python
 
