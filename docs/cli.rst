@@ -19,6 +19,30 @@ access Fetcher functions using ``ref-seq-fetcher``
     sequence  retrieve sequence using base_url and checksum
 
 
+To retrieve service-info
+========================
+
+.. code-block:: bash
+
+    ref-seq-fetcher info --help
+
+    info [OPTIONS] BASE_URL
+
+    retrieve service info using base_url
+
+    Options:
+    --help  Show this message and exit.
+
+Examples
+--------
+
+.. code-block:: bash
+
+    ref-seq-fetcher info https://www.ebi.ac.uk/ena/cram/
+
+    {"service": {"circular_supported": "true", "subsequence_limit": 4000000, "algorithms": ["md5", "trunc512"], "supported_api_versions": ["1.0"]}}
+
+
 To retrieve a sequence
 ======================
 

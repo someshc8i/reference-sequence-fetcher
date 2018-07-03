@@ -130,12 +130,16 @@ def test_metadata(server, data):
             Fetcher.metadata(server, seq.md5), seq, seq.md5)
 
 
-def test_service_info(server, data):
-    '''Test info retrieval from fetch_info and Fetch.info using a mock server.
-    '''
-    fetcher = Fetcher(server)
-    info = fetcher.fetch_info()
+def check_complete_info_response(info):
     assert "circular_supported" in info
     assert "algorithms" in info
     assert "subsequence_limit" in info
     assert "supported_api_versions" in info
+
+
+def test_service_info(server):
+    '''Test info retrieval from fetch_info and Fetch.info using a mock server.
+    '''
+    fetcher = Fetcher(server)
+    check_complete_info_response(fetcher.fetch_info())
+    check_complete_info_response(Fetcher.info(server))
