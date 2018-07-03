@@ -162,6 +162,20 @@ class Fetcher(object):
         response = handle_error(requests.get(url))
         return response.text
 
+    def fetch_info(self):
+        '''
+        objective:
+            Used to retrieve service info of the base_url
+        '''
+
+        API = '/sequence/service-info'
+        url = self.get_base_url() + API
+        # headers = {}
+        # if 'encoding' in kwargs:
+        #     headers['Accept'] = str(kwargs['encoding'])
+        response = handle_error(requests.get(url))
+        return response.text
+
     @classmethod
     def sequence(cls, base_url, checksum, **kwargs):
         '''
@@ -195,3 +209,13 @@ class Fetcher(object):
         '''
         fetcher = cls(base_url)
         return fetcher.fetch_metadata(checksum, **kwargs)
+
+    @classmethod
+    def info(cls, base_url):
+        '''
+        objective:
+            Used as the shortcut method to retrieve service info and internally
+            calls fetch_info.
+        '''
+        fetcher = cls(base_url)
+        return fetcher.fetch_info()
