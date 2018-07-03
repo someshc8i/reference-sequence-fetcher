@@ -12,6 +12,7 @@ class MockResponse(object):
         self.status_code = status_code
         self.text = text
 
+
 def get_metadata(seq):
     '''Used to retrieve metadata of sequence object using checksum. Called from
     check_complete_metdata_response
