@@ -23,6 +23,12 @@ API Documentation
 
         :rtype: void
 
+    .. py:method:: fetch_info()
+
+        Returns the service information of the server being queried
+
+        :rtype: dict
+
     .. py:method:: fetch_sequence(checksum, [start=None, end=None])
 
         Act as factory method for retrieving sequences
@@ -47,12 +53,22 @@ API Documentation
 
         :rtype: dict
 
+    .. py:classmethod:: info(base_url)
+
+        A class method for easily fetching single service info without creating Fetcher object.
+
+        :rtype: dict
+
     .. py:classmethod:: sequence(base_url, checksum, [start=None, end=None])
 
         A class method for easily fetching single sequence without creating Fetcher object.
         Parameters definitions as per defined above
 
+        :rtype: string
+
     .. py:classmethod:: metdata(base_url, checksum)
 
         A class method for easily fetching single metadata without creating Fetcher object.
         Parameters definitions as per defined above
+
+        :rtype: dict

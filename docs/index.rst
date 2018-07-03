@@ -18,10 +18,12 @@ An example would be like::
     >>ATGCATCGACTG.......ATGCATCGACTG
 
 Fetcher object typically has two methods:
+ * `fetch_info` to fetch the service info of the server used in that particular Fetcher object
  * `fetch_sequence` to fetch the sequence metadata
  * `fetch_metadata` to fetch the metadata of the sequence
 
-and two class methods `sequenece` and `metadata`
+
+and three class methods `info`, `sequenece` and `metadata`
 
 .. note::
 

@@ -19,6 +19,17 @@ Create a new Fetcher instance
 
 The only required parameter for the `Fetcher` is a server url. This will be the server which will be queried for fetching data
 
+Fetch serive info
+=================
+
+After creating a new Fetcher instance you can use ``fetch_info`` to get the
+information regarding the server being qeried such as algorithms support,
+circular support, subsequence limit, supported API versions etc
+
+.. code-block:: python
+
+   print(fetcher.fetch_info()
+
 Fetch sequence data
 ===================
 
