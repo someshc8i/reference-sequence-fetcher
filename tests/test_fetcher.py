@@ -12,21 +12,18 @@ class MockResponse(object):
         self.status_code = status_code
         self.text = text
 
-
-def get_metadata(seq, checksum):
-    '''
-    Used to retrieve metadata of sequence object using checksum. Called from
+def get_metadata(seq):
+    '''Used to retrieve metadata of sequence object using checksum. Called from
     check_complete_metdata_response
     '''
     response = {
         "metadata": {
-            "id": checksum,
+            "md5": seq.md5,
+            "trunc512": seq.sha512,
             "length": seq.size,
-            "alias": []
+            "aliases": []
         }
     }
-    response["metadata"]["alias"].append({"alias": seq.md5})
-    response["metadata"]["alias"].append({"alias": seq.sha512})
     return json.dumps(response)
 
 
@@ -37,7 +34,7 @@ def check_complete_metdata_response(metadata, seq, checksum):
     assert for reponse header, status code and content
     '''
 
-    assert metadata == get_metadata(seq, checksum)
+    assert metadata == get_metadata(seq)
 
 
 def test_getter_setter_base_url_Fetcher():
@@ -83,7 +80,7 @@ def test_fetch_sub_sequence_retrieval_one_parameter(data, server):
     seq = data[0]
     assert fetcher.fetch_sequence(seq.md5, end=5) == 'CCACA'
     assert fetcher._Fetcher__cache == \
-        json.loads(get_metadata(seq, seq.md5))
+        json.loads(get_metadata(seq))
     assert fetcher.fetch_sequence(seq.md5, start=0) == seq.sequence
 
 

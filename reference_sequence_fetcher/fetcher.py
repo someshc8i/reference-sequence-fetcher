@@ -93,8 +93,7 @@ class Fetcher(object):
             stores in __cache mainly to have length only if __cache is already
             populated with the metadata of same sequence
         '''
-        if self.__cache is None or \
-                self.__cache['metadata']['id'] != checksum:
+        if self.__cache is None or (self.__cache['metadata']['md5'] != checksum and self.__cache['metadata']['trunc512'] != checksum):
             API = '/sequence/'
             url = self.get_base_url() + API + str(checksum) + '/metadata'
             self.__cache = json.loads(handle_error(requests.get(url)).text)
