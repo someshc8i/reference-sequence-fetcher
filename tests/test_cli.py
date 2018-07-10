@@ -1,6 +1,3 @@
-import json
-import pytest
-
 from click.testing import CliRunner
 from reference_sequence_fetcher.cli import sequence, metadata, info
 from tests.test_fetcher import get_metadata
@@ -16,7 +13,6 @@ def test_sequence(server, data):
     assert seq.sequence in result.output
 
 
-@pytest.mark.skip
 def test_metadata(server, data):
     '''Test case to test metadata function of cli.
     '''
@@ -24,14 +20,16 @@ def test_metadata(server, data):
     runner = CliRunner()
     result = runner.invoke(metadata, [server, seq.md5])
     assert result.exit_code == 0
-    assert get_metadata(seq) in json.dumps(result.output)
+    assert get_metadata(seq) in result.output
 
 
-@pytest.mark.skip
 def test_info(server, data):
     '''Test case to test metadata function of cli.
     '''
     runner = CliRunner()
-    result = runner.invoke(info)
+    result = runner.invoke(info, [server])
     assert result.exit_code == 0
-    # assert get_metadata(seq, seq.sequence) in json.dumps(result.output)
+    assert 'circular_supported' in result.output
+    assert 'algorithms' in result.output
+    assert 'subsequence_limit' in result.output
+    assert 'supported_api_versions' in result.output

@@ -48,7 +48,13 @@ def test_getter_setter_base_url_Fetcher():
     fetcher.set_base_url('http://localhost')
     assert fetcher.get_base_url() == 'http://localhost'
 
-    assert str(fetcher) == 'http://localhost'
+    fetcher.set_base_url('http://localhost/cran')
+    assert fetcher.get_base_url() == 'http://localhost/cran'
+
+    fetcher.set_base_url('http://localhost/cran/')
+    assert fetcher.get_base_url() == 'http://localhost/cran'
+
+    assert str(fetcher) == 'http://localhost/cran'
 
 
 def test_fetch_complete_sequence_retrieval(data, server):
