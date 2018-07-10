@@ -24,7 +24,7 @@ def sequence(base_url, checksum, start, end):
 @main.command(help='retrieve metadata using base_url and checksum')
 @click.argument('base_url')
 @click.argument('checksum')
-def metadata(base_url, checksum, encoding):
+def metadata(base_url, checksum):
     '''maps to class method Fetcher.metadata for metadata retrieval
     '''
     click.echo(Fetcher.metadata(base_url, checksum))

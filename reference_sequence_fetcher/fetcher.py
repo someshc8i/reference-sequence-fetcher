@@ -80,7 +80,8 @@ class Fetcher(object):
         if url.scheme == '':
             self.__base_url = 'http://' + url.path
         else:
-            self.__base_url = url.scheme + '://' + url.netloc
+            self.__base_url = url.scheme + '://' + url.netloc + url.path
+        self.__base_url = self.__base_url[:-1] if self.__base_url[-1] == '/' else self.__base_url
 
     def __set_cache(self, checksum):
         '''
@@ -125,7 +126,6 @@ class Fetcher(object):
             headers['Range'] = 'bytes=' + str(start) + '-' + str(end - 1)
 
         elif (start is not None and end is None) or (start is None and end is not None):
-            print('why :()' + str(start) + str(end))
             self.__set_cache(checksum)
             length = self.__cache['metadata']['length']
             if start is None:
