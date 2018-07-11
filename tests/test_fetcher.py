@@ -108,11 +108,23 @@ def test_fetch_circular_sub_sequence_retrieval(data, server):
     (500, 'There maybe some internal server error.')
 
 ])
-def test_handle_error_function(server, _input, _output):
+def test_handle_error_function_sequence(server, _input, _output):
     '''Uses MockResponse object to test handle_error function
     '''
     with pytest.raises(Exception) as excinfo:
-        handle_error(MockResponse(_input))
+        handle_error(MockResponse(_input), 'sequence')
+    assert str(excinfo.value) == _output
+
+
+@pytest.mark.parametrize("_input, _output", [
+    (400, 'Bad Request.'),
+    (404, 'Path does not exsist.')
+])
+def test_handle_error_function_metadata_info(server, _input, _output):
+    '''Uses MockResponse object to test handle_error function
+    '''
+    with pytest.raises(Exception) as excinfo:
+        handle_error(MockResponse(_input), 'metadata')
     assert str(excinfo.value) == _output
 
 
@@ -121,7 +133,7 @@ def test_warning_501_handle_error_function(server):
     handle_error function
     '''
     with pytest.warns(UserWarning, match='Circular support is not implemented in the server'):
-        handle_error(MockResponse(501))
+        handle_error(MockResponse(501), 'sequence')
 
 
 def test_metadata(server, data):

@@ -4,7 +4,7 @@ import json
 from urllib.parse import urlparse
 
 
-def handle_error(response):
+def handle_error(response, api):
     '''
     args:
         reponse - Response object from requests library. Called from
@@ -16,10 +16,17 @@ def handle_error(response):
     '''
 
     if response.status_code == 400:
-        raise Exception(
-            'Check the parameters provided i.e start, end, fbs and lbs.')
+        if api == 'sequence':
+            raise Exception(
+                'Check the parameters provided i.e start, end, fbs and lbs.')
+        else:
+            raise Exception(
+                'Bad Request.')
     if response.status_code == 404:
-        raise Exception('Checksum identifier provided can not be found.')
+        if api == 'sequence':
+            raise Exception('Checksum identifier provided can not be found.')
+        else:
+            raise Exception('Path does not exsist.')
     if response.status_code == 415:
         raise Exception('Encoding is not supported by the server.')
     if response.status_code == 416:
@@ -97,7 +104,7 @@ class Fetcher(object):
         if self.__cache is None or (self.__cache['metadata']['md5'] != checksum and self.__cache['metadata']['trunc512'] != checksum):
             API = '/sequence/'
             url = self.get_base_url() + API + str(checksum) + '/metadata'
-            self.__cache = json.loads(handle_error(requests.get(url)).text)
+            self.__cache = json.loads(handle_error(requests.get(url), 'metadata').text)
 
     def fetch_sequence(self, checksum, **kwargs):
         '''
@@ -140,7 +147,7 @@ class Fetcher(object):
         # if encoding:
         #     headers['Accept'] = encoding
 
-        response = handle_error(requests.get(url, headers=headers))
+        response = handle_error(requests.get(url, headers=headers), 'sequence')
         return response.text
 
     def fetch_metadata(self, checksum, **kwargs):
@@ -158,7 +165,7 @@ class Fetcher(object):
         # headers = {}
         # if 'encoding' in kwargs:
         #     headers['Accept'] = str(kwargs['encoding'])
-        response = handle_error(requests.get(url))
+        response = handle_error(requests.get(url), 'metadata')
         return response.text
 
     def fetch_info(self):
@@ -172,7 +179,7 @@ class Fetcher(object):
         # headers = {}
         # if 'encoding' in kwargs:
         #     headers['Accept'] = str(kwargs['encoding'])
-        response = handle_error(requests.get(url))
+        response = handle_error(requests.get(url), 'info')
         return response.text
 
     @classmethod
