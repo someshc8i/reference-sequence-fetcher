@@ -10,4 +10,4 @@ reference-sequence-fetcher is a python client to retrieve sequence and metadata
 from reference servers in a user friendly and easy to use manner. It has requests
 library at its heart and allows you to fetch sequences and metadata using a Fetcher object.
 
-The documentation is available [here](https://compliancedoc.readthedocs.io/en/latest/)
+The documentation is available [here](https://reference-sequence-fetcher.readthedocs.io/en/latest/)
